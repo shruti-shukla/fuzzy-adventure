@@ -8,6 +8,8 @@ jobs:
 
     steps:
      - uses: actions/checkout@v1
+     - name: Install scorecard
+       run: brew install scorecard
      - name: Run checks
        uses: ./.github/actions/checks
        with:
