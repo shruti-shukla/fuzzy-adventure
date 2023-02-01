@@ -1,0 +1,16 @@
+name: JS Actions
+
+on: [push]
+
+jobs:
+  action:
+    runs-on: macOS-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: download command line tool
+        run: brew install scorecard
+			- name: set github auth token
+			  run: export GITHUB_AUTH_TOKEN=${{github.token}}
+			- name: run scorecard command line
+			  run: scorecard --repo=github.com/shruti-shukla/fuzzy-adventure --checks Branch-Protection --show-details
