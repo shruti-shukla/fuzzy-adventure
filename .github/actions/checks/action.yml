@@ -2,9 +2,12 @@ name: 'Actions Reliability Checks'
 description: 'A github action to run reliability checks for marketplace actions'
 author: 'Shruti Shukla'
 inputs:
-  accessToken:
+  token:
     description: 'Github auth token for by-passing GH API rate limits/ for private repos'
     default: ${{ github.token }}
+  checkName: 
+    description: 'Name of the check you want to run'
+    required: false
 branding:
   color: red
   icon: git-pull-request

@@ -6,8 +6,10 @@ jobs:
   action:
     runs-on: "ubuntu-latest"
 
-
     steps:
      - uses: actions/checkout@v1
      - name: Run checks
        uses: ./.github/actions/checks
+       with:
+        token: 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
+        checkName: "Branch-Protection"
