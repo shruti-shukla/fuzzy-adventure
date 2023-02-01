@@ -14,8 +14,8 @@ console.log(`Repo Name: ${repoName}`)
 console.log(`Repo Owner: ${repoOwner}`)
 var result = 'Unable to run OSSF checks'
 if(checkName) {
-    result = execSync(` export GITHUB_AUTH_TOKEN=${token} > scorecard --repo=github.com/${repoOwner}/${repoName} --checks=${checkName}`).toString();
+    result = execSync(` export GITHUB_AUTH_TOKEN=${token} ; scorecard --repo=github.com/${repoOwner}/${repoName} --checks=${checkName}`).toString();
 } else {
-    result = execSync(` export GITHUB_AUTH_TOKEN=${token} > scorecard --repo=github.com/${repoOwner}/${repoName}`).toString();
+    result = execSync(` export GITHUB_AUTH_TOKEN=${token} ; scorecard --repo=github.com/${repoOwner}/${repoName}`).toString();
 }
 console.log(result);
