@@ -12,6 +12,6 @@ jobs:
      - name: download command line tool
        run: brew install scorecard
      - name: set github auth token
-       run: export GITHUB_AUTH_TOKEN=${{github.token}}
+       run: export GITHUB_AUTH_TOKEN=${{ secrets.OSSF_PAT }}
      - name: scorecard command line
        run: scorecard --repo=github.com/shruti-shukla/fuzzy-adventure --checks Branch-Protection --show-details
