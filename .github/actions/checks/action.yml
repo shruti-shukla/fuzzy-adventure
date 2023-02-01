@@ -1,0 +1,13 @@
+name: 'Actions Reliability Checks'
+description: 'A github action to run reliability checks for marketplace actions'
+author: 'Shruti Shukla'
+inputs:
+  accessToken:
+    description: 'Github auth token for by-passing GH API rate limits/ for private repos'
+    default: ${{ github.token }}
+branding:
+  color: red
+  icon: git-pull-request
+runs:
+  using: 'node12'
+  main: 'index.js'
