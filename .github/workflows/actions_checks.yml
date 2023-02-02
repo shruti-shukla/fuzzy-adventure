@@ -13,5 +13,5 @@ jobs:
      - name: Run checks
        uses: ./.github/actions/checks
        with:
-        token: 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
+        token: ${{secrets.OSSF_PAT}}
         checkName: "Branch-Protection"
