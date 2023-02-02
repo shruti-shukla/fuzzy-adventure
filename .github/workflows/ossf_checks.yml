@@ -12,6 +12,6 @@ jobs:
        run: brew install scorecard
      - name: set github auth token and run scorecard
        run: |
-              export GITHUB_AUTH_TOKEN=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
+              export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
               scorecard --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --show-details
 
