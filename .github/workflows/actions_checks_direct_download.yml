@@ -4,20 +4,20 @@ on: [push]
 
 jobs:
   action:
- runs-on: "ubuntu-latest"
+    runs-on: "ubuntu-latest"
 
     steps:
- 
-    - name: Setup Go environment
-      uses: actions/setup-go@v3.5.0
-    - name: Get Scorecard release 
-      run: curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
-    - name: Extract tar
-      run: | 
-           tar -xf scorecard_4.10.2_linux_amd64.tar.gz
-           ls
-     - name: Run checks
-       uses: ./.github/actions/checks-with-standalone-download
-       with:
-        token: ${{secrets.OSSF_PAT}}
-        checkName: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
+
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.5.0
+      - name: Get Scorecard release 
+        run: curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
+      - name: Extract tar
+        run: | 
+             tar -xf scorecard_4.10.2_linux_amd64.tar.gz
+             ls
+      - name: Run checks
+        uses: ./.github/actions/checks-with-standalone-download
+        with:
+          token: ${{secrets.OSSF_PAT}}
+          checkName: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
