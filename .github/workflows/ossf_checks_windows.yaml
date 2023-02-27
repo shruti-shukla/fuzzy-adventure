@@ -4,7 +4,7 @@ on: [push]
 
 jobs:
   action:
-    runs-on: "ubuntu-latest"
+    runs-on: "windows-latest"
 
     steps:
  
@@ -20,12 +20,12 @@ jobs:
      # run: cd scorecard_4.10.2_windows_amd64
     - name: Display the path
       run: echo %PATH%
-      shell: pwsh
+      shell: cmd
     - name: set github auth token and run scorecard
       run: |
           set GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
           ./scorecard-windows-amd64.exe
-      shell: pwsh
+      shell: cmd
       
 
 
