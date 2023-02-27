@@ -1,0 +1,25 @@
+name: OSSF command line tool workflow Windows
+
+on: [push]
+
+jobs:
+  action:
+    runs-on: "ubuntu-latest"
+
+    steps:
+ 
+    - name: Setup Go environment
+      uses: actions/setup-go@v3.5.0
+    - name: Get Scorecard release 
+      run: curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
+    - name: Extract tar
+      run: | 
+           tar -xf scorecard_4.10.2_windows_amd64.tar.gz
+           ls
+    # - name: Go to scorecard directory
+    # run: cd scorecard_4.10.2_windows_amd64
+    - name: set github auth token and run scorecard
+      run: |
+              export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
+              ./scorecard-windows-amd64 --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --show-details
+
