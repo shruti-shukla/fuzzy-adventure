@@ -24,7 +24,7 @@ jobs:
     - name: set github auth token and run scorecard
       run: |
           set GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
-          ./scorecard-windows-amd64.exe
+          scorecard-windows-amd64.exe
       shell: cmd
       
 
