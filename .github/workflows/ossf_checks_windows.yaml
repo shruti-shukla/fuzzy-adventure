@@ -14,7 +14,7 @@ jobs:
       run: curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
     - name: Extract tar
       run: | 
-           tar -xf scorecard_4.10.2_windows_amd64.tar.gz
+           tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
            dir
     #- name: Go to scorecard directory
      # run: cd scorecard_4.10.2_windows_amd64
