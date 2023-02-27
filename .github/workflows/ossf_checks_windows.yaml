@@ -23,7 +23,7 @@ jobs:
       shell: pwsh
     - name: set github auth token and run scorecard
       run: |
-          export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
+          set GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
           ./scorecard-windows-amd64.exe
       shell: pwsh
       
