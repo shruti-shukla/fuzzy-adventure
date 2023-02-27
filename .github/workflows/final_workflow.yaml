@@ -1,11 +1,10 @@
-/*
-  To create a customizable workflow that will - 
-  - have clear permissions
-  - take inputs and use them to run only specified checks
-  - handle errors
-  - create a SARIF and upload it as an artifact
-  - upload the SARIF file to code scanning service
-*/
+# To create a customizable workflow that will - 
+# - have clear permissions
+# - take inputs and use them to run only specified checks
+# - handle errors
+# - create a SARIF and upload it as an artifact
+#  - upload the SARIF file to code scanning service
+
 
 name: Security Checks for Actions on Marketplace
 on: dynamic
@@ -15,7 +14,7 @@ jobs:
     name: Actions Security Checks
     runs-on: runner_type # self_hosted or cloud 
     permissions:
-      content: read
+      contents: read
       id-token: read
     steps:
       - uses: actions/checkout@v1
@@ -31,11 +30,11 @@ jobs:
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
             
       # Run Checks Store Output
-      - name: uses: ./.github/actions/checks-with-standalone-download
-        with:
-          token: ${{secrets.OSSF_PAT}} # Find out how to use this?
-          checkName: check_names 
-
+      - name: Run Security Checks
+        run: |
+              export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
+              ./scorecard-linux-amd64 --repo=github.com/shruti-shukla/fuzzy-adventure --checks=check_names
+              
       # Create/Modify Sarif using the Output
       # Store SARIF ID as artifact
       # Upload SARIF file to Code scanning service
