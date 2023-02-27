@@ -1,0 +1,43 @@
+/*
+  To create a customizable workflow that will - 
+  - have clear permissions
+  - take inputs and use them to run only specified checks
+  - handle errors
+  - create a SARIF and upload it as an artifact
+  - upload the SARIF file to code scanning service
+*/
+
+name: Security Checks for Actions on Marketplace
+on: dynamic
+
+jobs: 
+  run-security-checks:
+    name: Actions Security Checks
+    runs-on: runner_type # self_hosted or cloud 
+    permissions:
+      content: read
+      id-token: read
+    steps:
+      - uses: actions/checkout@v1
+      
+      # Set up Go Environment
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.5.0
+    
+      # Install Standalone Command Line Tool for OSSF
+      - name: Install OSSF Command Line Tool
+        run: |
+             curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
+             tar -xf scorecard_4.10.2_linux_amd64.tar.gz
+            
+      # Run Checks Store Output
+      - name: uses: ./.github/actions/checks-with-standalone-download
+        with:
+          token: ${{secrets.OSSF_PAT}} # Find out how to use this?
+          checkName: check_names 
+
+      # Create/Modify Sarif using the Output
+      # Store SARIF ID as artifact
+      # Upload SARIF file to Code scanning service
+    
+
