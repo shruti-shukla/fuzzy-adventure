@@ -16,6 +16,8 @@ jobs:
     permissions:
       contents: read
       id-token: read
+      # Needed to upload the results to code-scanning dashboard.
+      security-events: write
     steps:
       - uses: actions/checkout@v1
       
