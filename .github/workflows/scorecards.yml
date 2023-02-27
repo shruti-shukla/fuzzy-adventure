@@ -21,7 +21,7 @@ permissions: read-all
 jobs:
   analysis:
     name: Scorecards analysis
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     permissions:
       # contents: read
       # Needed to upload the results to code-scanning dashboard.
