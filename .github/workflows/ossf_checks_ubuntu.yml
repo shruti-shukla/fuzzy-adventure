@@ -17,7 +17,7 @@ jobs:
            tar -xf scorecard_4.10.2_linux_amd64.tar.gz
            ls
     - name: Go to scorecard directory
-      run: echo ${{ vars.POLICY }} >> policy.yaml
+      run: echo "${{ vars.POLICY }}" >> policy.yaml
     - name: set github auth token and run scorecard
       run: |
               export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
