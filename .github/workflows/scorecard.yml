@@ -47,7 +47,7 @@ jobs:
           # - you are installing Scorecard on a *private* repository
           # To create the PAT, follow the steps in https://github.com/ossf/scorecard-action#authentication-with-pat.
           # repo_token: ${{ secrets.SCORECARD_TOKEN }}
-
+          policy_file: policy.yaml
           # Public repositories:
           #   - Publish results to OpenSSF REST API for easy access by consumers
           #   - Allows the repository to include the Scorecard badge.
