@@ -4,10 +4,12 @@
 # - handle errors
 # - create a SARIF and upload it as an artifact
 #  - upload the SARIF file to code scanning service
-
+# Dependabot example workflow file
 
 name: Security Checks for Actions on Marketplace
-on: dynamic
+on:  # dynamic
+  workflow_dispatch:
+  push: 
 
 jobs: 
   run-security-checks:
