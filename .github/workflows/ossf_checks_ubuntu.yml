@@ -74,7 +74,7 @@ jobs:
                   mode: enforced
               Maintained:
                   score: 1
-            mode: enforced" >> policy.yml
+            mode: enforced" >> policy.yaml
     - name: set github auth token and run scorecard
       run: |
               export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
