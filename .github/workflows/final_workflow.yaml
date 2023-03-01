@@ -37,7 +37,7 @@ jobs:
       - name: Run Security Checks
         run: |
               export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
-              ./scorecard-linux-amd64 --repo=github.com/shruti-shukla/fuzzy-adventure --checks=check_names
+              ENABLE_SARIF=true ./scorecard-linux-amd64 --repo=github.com/shruti-shukla/fuzzy-adventure --checks=check_names --policy=policy.yaml --format=sarif
               
       # Create/Modify Sarif using the Output
       # Store SARIF ID as artifact
