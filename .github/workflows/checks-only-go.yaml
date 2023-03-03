@@ -1,0 +1,18 @@
+name: OSSF command line tool workflow Ubuntu
+
+on: [push]
+
+jobs:
+  action:
+    runs-on: "ubuntu-latest"
+
+    steps:
+ 
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.5.0
+      - name: Install tool
+        run: go get github.com/ossf/scorecard/v2
+      - name: set github auth token and run scorecard
+        run: |
+              export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
+              scorecard --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --show-details
