@@ -15,4 +15,5 @@ jobs:
       - name: set github auth token and run scorecard
         run: |
               export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
-              scorecard --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --show-details
+              go run . --repo=https://github.com/coreinfrastructure/best-practices-badge --checks=Pinned-Dependencies --show-details --format=json | jq
+        
