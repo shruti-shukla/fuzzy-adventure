@@ -1,4 +1,4 @@
-name: OSSF command line tool workflow Ubuntu
+name: OSSF Only Go Ubuntu
 
 on: [push]
 
