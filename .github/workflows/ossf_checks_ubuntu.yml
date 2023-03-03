@@ -8,8 +8,8 @@ jobs:
 
     steps:
  
-    - name: Setup Go environment
-      uses: actions/setup-go@v3.5.0
+#     - name: Setup Go environment
+#       uses: actions/setup-go@v3.5.0
     - name: Get Scorecard release 
       run: curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
     - name: Extract tar
