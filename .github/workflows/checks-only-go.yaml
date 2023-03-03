@@ -11,7 +11,7 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
       - name: Install tool
-        run: go install github.com/ossf/scorecard/v4.10.2
+        run: go install github.com/ossf/scorecard/v4.10.2@latest
       - name: set github auth token and run scorecard
         run: |
               export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
