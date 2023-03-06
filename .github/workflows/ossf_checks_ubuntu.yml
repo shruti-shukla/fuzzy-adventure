@@ -4,6 +4,10 @@ on: [push]
 
 jobs:
   action:
+    permissions: 
+      security-events: write
+      contents: write 
+
     runs-on: "ubuntu-latest"
 
     steps:
