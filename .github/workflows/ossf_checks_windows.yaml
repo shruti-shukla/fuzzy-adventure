@@ -25,8 +25,11 @@ jobs:
     - name: set github auth token and run scorecard
       run: |
           set GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
-          scorecard-windows-amd64.exe --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --show-details --format=json
+          ENABLE_SARIF=true scorecard-windows-amd64.exe --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --policy=policy.yaml --format=sarif > results.sarif
       shell: cmd
-      
+    - name: Show files
+      run: | 
+           dir
+           cat results.sarif      
 
 
