@@ -26,6 +26,7 @@ jobs:
       run: |
           set GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
           set ENABLE_SARIF=true
+          echo "${{ vars.POLICY }}" >> policy.yaml
           scorecard-windows-amd64.exe --repo=github.com/shruti-shukla/fuzzy-adventure --checks=Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy --policy=policy.yaml --format=sarif > results.sarif
       shell: cmd
     - name: Show files
