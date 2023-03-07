@@ -20,7 +20,7 @@ jobs:
     #- name: Go to scorecard directory
      # run: cd scorecard_4.10.2_windows_amd64
     - name: Display the path
-      run: (echo ${{ vars.POLICY }}) > policy.yaml
+      run: echo ("${{ vars.POLICY }}") > policy.yaml
       shell: cmd
     - name: set github auth token and run scorecard
       run: |
