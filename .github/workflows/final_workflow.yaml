@@ -7,9 +7,9 @@
 # Dependabot example workflow file: https://github.com/github/dependabot-api/blob/main/app/actions/run_updater/actions/workflow.rb
 
 name: Security Checks for Actions on Marketplace
-on: dynamic
-  # workflow_dispatch:
-  # push: 
+on: # dynamic
+  workflow_dispatch:
+  push: 
 
 jobs: 
   run-security-checks:
@@ -20,8 +20,10 @@ jobs:
      REPO: "github.com/${{ github.repository }}"
      POLICY_FILE: "policy.yaml"
      OUTPUT_FORMAT: "sarif"
-     AUTH_TOKEN: ${{ secrets.OSSF_PAT }}
+     GITHUB_AUTH_TOKEN: ${{ secrets.OSSF_PAT }}
      RUNNER_OS: ${{ runner.os }}
+     ENABLE_SARIF: true
+     OUTPUT_FILE: results.sarif
      
     steps:
       - uses: actions/checkout@v1
@@ -32,21 +34,20 @@ jobs:
         uses: actions/setup-go@v3.5.0
     
         if: RUNNER_OS == "Windows"
-      - name: Install OSSF Command Line Tool for Windows Runners
+      - name: Install & Run OSSF Command Line Tool for Windows Runners
         run: |
+             curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
+             tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
+             scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
+        if: RUNNER_OS == "Linux" || RUNNER_OS == "macOS"
+      - name: Install & Run OSSF Command Line Tool for Linux/MacOS Runners
+        run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
+             ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
-       
-      # Run Checks Store Output
-      - name: Run Security Checks
-        run: |
-              export GITHUB_AUTH_TOKEN=$AUTH_TOKEN
-              ENABLE_SARIF=true ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT
-              
-            
-              
+           
       # Create/Modify Sarif using the Output
       # Store SARIF ID as artifact
       # Upload SARIF file to Code scanning service
