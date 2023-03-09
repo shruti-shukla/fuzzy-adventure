@@ -31,6 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       
+      - name: Print runner OS
+        run: echo " ${{ runner.os }}
+      
       # Set up Go Environment 
       # This step may only be required for self-hosted runners, as GH hosted runners already have Go installed
       - name: Setup Go environment
