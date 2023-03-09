@@ -42,7 +42,7 @@ jobs:
         
       # Create a Policy File for using the OSSF Command Line Tool
       - if: ${{ runner.os == 'Windows' }} 
-        run: (echo ${{ vars.POLICY_WINDOWS }}) > $POLICY_FILE
+        run: (echo ${{ vars.POLICY_WINDOWS }} ) > $POLICY_FILE
       - if: ${{ runner.os != 'Windows' }} 
         run: echo "${{ vars.POLICY }}" >> $POLICY_FILE
       
