@@ -15,10 +15,14 @@ jobs:
   run-security-checks:
     
     name: Actions Security Checks
-    strategy:
-       matrix:
-        os: [ubuntu-latest, windows-latest, macOS-latest]
-    runs-on: ${{ matrix.os }}
+    permissions: 
+      contents: read
+      security-events: write #To Upload SARIF to the Code scanning service
+      
+    # strategy:
+    #   matrix:
+    #    os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ubuntu-latest # ${{ matrix.os }}
     env: 
       CHECK_NAMES: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
       REPO: "github.com/${{ github.repository }}"
@@ -71,6 +75,11 @@ jobs:
           retention-days: 5
 
       - name: "Upload results to code-scanning service"
+        id: sarif-upload
         uses: github/codeql-action/upload-sarif@17573ee1cc1b9d061760f3a006fc4aac4f944fd5 # v2.2.4
         with:
           sarif_file: results.sarif
+      
+      - name: Print SARIF-ID
+        run: echo "${{ steps.sarif-upload.outputs.sarif-id }}"
+          
