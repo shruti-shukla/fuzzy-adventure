@@ -36,15 +36,15 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
 
-      - name: Install & Run OSSF Command Line Tool for Windows Runners
-        if: ${{ runner.os }} == "Windows"
+      - if: ${{ runner.os }} == "Windows"
+        name: Install OSSF Tool & Run Analysis on Windows Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
-      - name: Install & Run OSSF Command Line Tool for Linux/MacOS Runners
-        if: ${{ runner.os }} == "Linux" || ${{ runner.os }} == "macOS"
+      - if: ${{ runner.os }} == "Linux" || ${{ runner.os }} == "macOS" 
+        name: Install OSSF Tool & Run Analysis on Linux/MacOS Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
