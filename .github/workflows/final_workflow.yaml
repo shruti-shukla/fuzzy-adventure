@@ -14,16 +14,15 @@ on: # dynamic
 jobs: 
   run-security-checks:
     name: Actions Security Checks
-    runs-on: ubuntu-latest #runner_type self_hosted or cloud 
+    runs-on: [windows, ubuntu-latest, macOS] #, self-hosted
     env: 
-     CHECK_NAMES: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
-     REPO: "github.com/${{ github.repository }}"
-     POLICY_FILE: "policy.yaml"
-     OUTPUT_FORMAT: "sarif"
-     GITHUB_AUTH_TOKEN: ${{ secrets.OSSF_PAT }}
-     RUNNER_OS: ${{ runner.os }}
-     ENABLE_SARIF: true
-     OUTPUT_FILE: results.sarif
+      CHECK_NAMES: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
+      REPO: "github.com/${{ github.repository }}"
+      POLICY_FILE: "policy.yaml"
+      OUTPUT_FORMAT: "sarif"
+      GITHUB_AUTH_TOKEN: ${{ secrets.OSSF_PAT }}
+      ENABLE_SARIF: true
+      OUTPUT_FILE: results.sarif
      
     steps:
       - uses: actions/checkout@v1
@@ -33,14 +32,14 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
     
-        if: RUNNER_OS == "Windows"
+        if: ${{ runner.os }} == "Windows"
       - name: Install & Run OSSF Command Line Tool for Windows Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
-        if: RUNNER_OS == "Linux" || RUNNER_OS == "macOS"
+        if: ${{ runner.os }} == "Linux" || RUNNER_OS == "macOS"
       - name: Install & Run OSSF Command Line Tool for Linux/MacOS Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
