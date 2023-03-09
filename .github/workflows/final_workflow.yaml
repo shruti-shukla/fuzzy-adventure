@@ -42,7 +42,8 @@ jobs:
         
       # Create a Policy File for using the OSSF Command Line Tool
       - if: ${{ runner.os == 'Windows' }} 
-        run: (echo ${{ vars.POLICY_WINDOWS }}) > policy.yaml
+        run: (echo ${{ vars.POLICY_WINDOWS }}) > $POLICY_FILE
+        shell: cmd
       - if: ${{ runner.os != 'Windows' }} 
         run: echo "${{ vars.POLICY }}" >> $POLICY_FILE
       
@@ -54,6 +55,7 @@ jobs:
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              type $OUTPUT_FILE
+        shell: cmd
              
       - if: ${{ runner.os == 'Windows' }} 
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
