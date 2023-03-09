@@ -34,12 +34,18 @@ jobs:
      
     steps:
       - uses: actions/checkout@v1
-      
+
       # Set up Go Environment 
       # This step may only be required for self-hosted runners, as GH hosted runners already have Go installed
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
-
+        
+      # Create a Policy File for using the OSSF Command Line Tool
+      - if: ${{ runner.os == 'Windows' }} 
+        run: (echo ${{ vars.POLICY_WINDOWS }}) > $POLICY_FILE
+      - if: ${{ runner.os != 'Windows' }} 
+        run: echo "${{ vars.POLICY }}" >> $POLICY_FILE
+      
       # For Windows Runners
       - if: ${{ runner.os == 'Windows' }} 
         name: Install OSSF Tool & Run Analysis on Windows Runners
@@ -52,8 +58,7 @@ jobs:
       - if: ${{ runner.os == 'Windows' }} 
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
         run: echo "TODO"
- 
-      # For Linux/MacOS Runners
+      
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
         name: Install OSSF Tool & Run Analysis on Linux/MacOS Runners
         run: |
