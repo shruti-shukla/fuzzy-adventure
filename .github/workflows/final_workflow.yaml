@@ -32,21 +32,21 @@ jobs:
       - uses: actions/checkout@v1
       
       - name: Print runner OS
-        run: echo " ${{ runner.os }}
+        run: echo " ${{ runner.os }}"
       
       # Set up Go Environment 
       # This step may only be required for self-hosted runners, as GH hosted runners already have Go installed
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
 
-      - if: ${{ runner.os }} == "Windows"
+      - if: ${{ runner.os }} == 'Windows'
         name: Install OSSF Tool & Run Analysis on Windows Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
-      - if: ${{ runner.os }} == "Linux" || ${{ runner.os }} == "macOS" 
+      - if: ${{ runner.os }} == 'Linux' || ${{ runner.os }} == 'macOS' 
         name: Install OSSF Tool & Run Analysis on Linux/MacOS Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
