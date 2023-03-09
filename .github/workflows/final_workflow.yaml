@@ -13,8 +13,12 @@ on: # dynamic
 
 jobs: 
   run-security-checks:
+    
     name: Actions Security Checks
-    runs-on: [windows, ubuntu-latest, macOS] #, self-hosted
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
     env: 
       CHECK_NAMES: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
       REPO: "github.com/${{ github.repository }}"
