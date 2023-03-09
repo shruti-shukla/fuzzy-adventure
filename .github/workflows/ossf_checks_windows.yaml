@@ -1,7 +1,6 @@
 name: OSSF command line tool workflow Windows
 
 on: [push]
-
 jobs:
   action:
     runs-on: "windows-latest"
