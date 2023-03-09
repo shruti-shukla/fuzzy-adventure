@@ -15,10 +15,10 @@ jobs:
   run-security-checks:
     
     name: Actions Security Checks
-    #strategy:
-     # matrix:
-      #  os: [ubuntu-latest, windows-latest, macOS-latest]
-    runs-on: ubuntu-latest #${{ matrix.os }}
+    strategy:
+       matrix:
+        os: [ubuntu-latest, windows-latest, macOS-latest]
+    runs-on: ${{ matrix.os }}
     env: 
       CHECK_NAMES: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
       REPO: "github.com/${{ github.repository }}"
@@ -36,6 +36,7 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
 
+      # For Windows Runners
       - if: ${{ runner.os == 'Windows' }} 
         name: Install OSSF Tool & Run Analysis on Windows Runners
         run: |
@@ -43,7 +44,12 @@ jobs:
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              type $OUTPUT_FILE
+             
+      - if: ${{ runner.os == 'Windows' }} 
+        name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
+        run: echo "TODO"
  
+      # For Linux/MacOS Runners
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
         name: Install OSSF Tool & Run Analysis on Linux/MacOS Runners
         run: |
@@ -52,8 +58,19 @@ jobs:
              ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              cat $OUTPUT_FILE
              
-      # Create/Modify Sarif using the Output
-      # Store SARIF ID as artifact
-      # Upload SARIF file to Code scanning service
-    
+      - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }}
+        name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
+        run: echo "TODO"
 
+      # Store SARIF file as an artifact
+      - name: "Upload artifact"
+        uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # v3.1.0
+        with:
+          name: SARIF file
+          path: results.sarif
+          retention-days: 5
+
+      - name: "Upload results to code-scanning service"
+        uses: github/codeql-action/upload-sarif@17573ee1cc1b9d061760f3a006fc4aac4f944fd5 # v2.2.4
+        with:
+          sarif_file: results.sarif
