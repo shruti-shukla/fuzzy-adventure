@@ -14,30 +14,38 @@ on: dynamic
 jobs: 
   run-security-checks:
     name: Actions Security Checks
-    runs-on: runner_type # self_hosted or cloud 
-    permissions:
-      contents: read
-      id-token: read
-      # Needed to upload the results to code-scanning dashboard.
-      security-events: write
+    runs-on: ubuntu-latest #runner_type self_hosted or cloud 
+    env: 
+     CHECK_NAMES: "Dangerous-Workflow,Binary-Artifacts,Branch-Protection,Code-Review,Dependency-Update-Tool,Vulnerabilities,Pinned-Dependencies,SAST,Security-Policy"
+     REPO: "github.com/${{ github.repository }}"
+     POLICY_FILE: "policy.yaml"
+     OUTPUT_FORMAT: "sarif"
+     AUTH_TOKEN: ${{ secrets.OSSF_PAT }}
+     RUNNER_OS: ${{ runner.os }}
+     
     steps:
       - uses: actions/checkout@v1
       
-      # Set up Go Environment
+      # Set up Go Environment 
+      # This step may only be required for self-hosted runners, as GH hosted runners already have Go installed
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
     
-      # Install Standalone Command Line Tool for OSSF
-      - name: Install OSSF Command Line Tool
+        if: RUNNER_OS == "Windows"
+      - name: Install OSSF Command Line Tool for Windows Runners
         run: |
+             
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
-            
+             
+       
       # Run Checks Store Output
       - name: Run Security Checks
         run: |
-              export GITHUB_AUTH_TOKEN=${{secrets.OSSF_PAT}}
-              ENABLE_SARIF=true ./scorecard-linux-amd64 --repo=github.com/shruti-shukla/fuzzy-adventure --checks=check_names --policy=policy.yaml --format=sarif
+              export GITHUB_AUTH_TOKEN=$AUTH_TOKEN
+              ENABLE_SARIF=true ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT
+              
+            
               
       # Create/Modify Sarif using the Output
       # Store SARIF ID as artifact
