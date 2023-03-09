@@ -40,19 +40,23 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
         
-      # Create a Policy File for using the OSSF Command Line Tool
       - if: ${{ runner.os == 'Windows' }} 
-        run: (echo ${{ vars.POLICY_WINDOWS }}) > %POLICY_FILE%
-        shell: cmd
-      - if: ${{ runner.os != 'Windows' }} 
-        run: echo "${{ vars.POLICY }}" >> $POLICY_FILE
-      
-      # For Windows Runners
-      - if: ${{ runner.os == 'Windows' }} 
-        name: Install OSSF Tool & Run Analysis on Windows Runners
+        name: Install OSSF Command Line Tool on Windows Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
+        shell: cmd
+      - if: ${{ runner.os != 'Windows' }} 
+        name: Install OSSF Command Line Tool on Linux/MacOS Runners
+        run: |
+             curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
+             tar -xf scorecard_4.10.2_linux_amd64.tar.gz
+      
+      # For Windows Runners
+      - if: ${{ runner.os == 'Windows' }} 
+        name: Create a Policy File & Run Analysis on Windows Runners
+        run: |
+             (echo ${{ vars.POLICY_WINDOWS }}) > %POLICY_FILE%
              scorecard-windows-amd64.exe --repo=%REPO% --checks=%CHECK_NAMES% --policy=%POLICY_FILE% --format=%OUTPUT_FORMAT% > %OUTPUT_FILE%
              type %OUTPUT_FILE%
         shell: cmd
@@ -62,10 +66,9 @@ jobs:
         run: echo "TODO"
       
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
-        name: Install OSSF Tool & Run Analysis on Linux/MacOS Runners
+        name: Create a Policy File & Run Analysis on Linux/MacOS Runners
         run: |
-             curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
-             tar -xf scorecard_4.10.2_linux_amd64.tar.gz
+             echo "${{ vars.POLICY }}" >> $POLICY_FILE
              ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              cat $OUTPUT_FILE
              
