@@ -43,7 +43,7 @@ jobs:
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
-        if: ${{ runner.os }} == "Linux" || ${{ runner.os }} == "macOS"
+        if: ${{ runner.os }} == "Linux" || ${{ runner.os }} == "macOS" || ${{ runner.os }} == "Ubuntu"
       - name: Install & Run OSSF Command Line Tool for Linux/MacOS Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
