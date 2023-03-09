@@ -9,7 +9,6 @@ jobs:
       GITHUB_AUTH_TOKEN: ${{ secrets.OSSF_PAT }}
       ENABLE_SARIF: true
     steps:
- 
     - name: Setup Go environment
       #uses: actions/setup-go@v3.5.0
       run: go version
