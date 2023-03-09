@@ -42,15 +42,15 @@ jobs:
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
              scorecard-windows-amd64.exe --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
-             
+             type $OUTPUT_FILE
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
         name: Install OSSF Tool & Run Analysis on Linux/MacOS Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
              ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
+             cat $OUTPUT_FILE
              
-           
       # Create/Modify Sarif using the Output
       # Store SARIF ID as artifact
       # Upload SARIF file to Code scanning service
