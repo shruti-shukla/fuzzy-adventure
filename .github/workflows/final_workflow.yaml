@@ -46,6 +46,7 @@ jobs:
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
              tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
         shell: cmd
+  
       - if: ${{ runner.os != 'Windows' }} 
         name: Install OSSF Command Line Tool on Linux/MacOS Runners
         run: |
@@ -63,8 +64,9 @@ jobs:
              
       - if: ${{ runner.os == 'Windows' }} 
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
-        run: echo "TODO"
-      
+        run: get-content %OUTPUT_FILE% | %{$_ -replace "Scorecard","Scorecard-for-Marketplace-Actions"}
+        shell: pwsh
+
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
         name: Create a Policy File & Run Analysis on Linux/MacOS Runners
         run: |
@@ -74,7 +76,7 @@ jobs:
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }}
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
         run: |
-             sed 's/Scorecard/Scorecard-for-Marketplace-Actions' $OUTPUT_FILE
+             sed 's/Scorecard/Scorecard-for-Marketplace-Actions/' $OUTPUT_FILE
              cat $OUTPUT_FILE
 
       # Store SARIF file as an artifact
