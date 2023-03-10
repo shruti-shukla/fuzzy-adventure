@@ -86,7 +86,7 @@ jobs:
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # v3.1.0
         with:
           name: SARIF file
-          path: $OUTPUT_FILE
+          path: ${{ env.OUTPUT_FILE }}
           retention-days: 5
 
       - name: "Upload results to code-scanning service"
