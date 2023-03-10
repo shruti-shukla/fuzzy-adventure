@@ -60,6 +60,7 @@ jobs:
         name: Create a Policy File & Run Analysis on Windows Runners
         run: |
              (echo ${{ vars.POLICY_WINDOWS }}) > %POLICY_FILE%
+             type %POLICY_FILE%
              scorecard-windows-amd64.exe --repo=%REPO% --checks=%CHECK_NAMES% --policy=%POLICY_FILE% --format=%OUTPUT_FORMAT% > %OUTPUT_FILE%
              type %OUTPUT_FILE%
         shell: cmd
