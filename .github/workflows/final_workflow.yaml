@@ -54,13 +54,18 @@ jobs:
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
-      
-      # For Windows Runners
+             
       - if: ${{ runner.os == 'Windows' }} 
         name: Create a Policy File & Run Analysis on Windows Runners
         run: |
              (echo ${{ vars.POLICY_WINDOWS }}) > %POLICY_FILE%
              type %POLICY_FILE%
+        shell: cmd
+      
+      # For Windows Runners
+      - if: ${{ runner.os == 'Windows' }} 
+        name: Create a Policy File & Run Analysis on Windows Runners
+        run: |
              scorecard-windows-amd64.exe --repo=%REPO% --checks=%CHECK_NAMES% --policy=%POLICY_FILE% --format=%OUTPUT_FORMAT% > %OUTPUT_FILE%
              type %OUTPUT_FILE%
         shell: cmd
