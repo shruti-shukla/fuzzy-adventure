@@ -64,7 +64,7 @@ jobs:
       - if: ${{ runner.os == 'Windows' }} 
         name: Create a Policy File & Run Analysis on Windows Runners
         run: |
-             scorecard-windows-amd64.exe --repo=%REPO% --checks=%CHECK_NAMES% --policy=%POLICY_FILE% --format=%OUTPUT_FORMAT% > %OUTPUT_FILE%
+             scorecard-windows-amd64.exe --repo=%REPO% --checks=%CHECK_NAMES% --policy=%POLICY_FILE% --format=%OUTPUT_FORMAT% > policy.yaml
              type %OUTPUT_FILE%
         shell: cmd
              
