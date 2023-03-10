@@ -57,9 +57,7 @@ jobs:
              
       - if: ${{ runner.os == 'Windows' }} 
         name: Create a Policy File & Run Analysis on Windows Runners
-        run: |
-             (echo ${{ vars.POLICY_WINDOWS }}) > %POLICY_FILE%
-             type %POLICY_FILE%
+        run: (echo ${{ vars.POLICY_WINDOWS }}) > %POLICY_FILE%
         shell: cmd
       
       # For Windows Runners
