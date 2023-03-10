@@ -78,7 +78,7 @@ jobs:
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }}
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
         run: |
-             sed 's/Scorecard/Scorecard-for-Marketplace-Actions/' $OUTPUT_FILE
+             sed -i 's/Scorecard/Scorecard-for-Marketplace-Actions/g' $OUTPUT_FILE
              cat $OUTPUT_FILE
 
       # Store SARIF file as an artifact
