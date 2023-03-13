@@ -71,7 +71,7 @@ jobs:
       - if: ${{ runner.os == 'Windows' }} 
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
         run: |
-             (get-content $OUTPUT_FILE | %{$_, -replace "Scorecard","Scorecard-for-Marketplace-Actions"}) | set-content $OUTPUT_FILE
+             (get-content $OUTPUT_FILE | %{$_ -replace "Scorecard","Scorecard-for-Marketplace-Actions"}) | set-content $OUTPUT_FILE
              cat $OUTPUT_FILE
         shell: pwsh
 
