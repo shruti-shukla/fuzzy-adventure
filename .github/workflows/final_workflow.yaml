@@ -11,7 +11,7 @@ on: # dynamic
   workflow_dispatch:
   push: 
 
-jobs: 
+jobs:
   run-security-checks:
     
     name: Actions Security Checks
@@ -42,30 +42,41 @@ jobs:
       - name: Setup Go environment
         uses: actions/setup-go@v3.5.0
         
-      - if: ${{ runner.os == 'Windows' }} 
-        name: Install OSSF Command Line Tool on Windows Runners
-        run: |
-             curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
-             tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
-        shell: cmd
+      
+      # For Linux/macOS Runners
   
       - if: ${{ runner.os != 'Windows' }} 
         name: Install OSSF Command Line Tool on Linux/MacOS Runners
         run: |
              curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_linux_amd64.tar.gz
              tar -xf scorecard_4.10.2_linux_amd64.tar.gz
-             
-      - if: ${{ runner.os == 'Windows' }} 
-        name: Create a Policy File & Run Analysis on Windows Runners
-        run: (echo ${{ vars.POLICY_WINDOWS }}) > "%POLICY_FILE%"
-        shell: cmd
-      
+
+      - if: ${{ runner.os != 'Windows' }} # ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
+        name: Create a Policy File & Run Analysis on Linux/MacOS Runners
+        run: |
+             echo "${{ vars.POLICY }}" >> $POLICY_FILE
+             ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
+
+      - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }}
+        name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
+        run: |
+             sed -i 's/Scorecard/Scorecard-for-Marketplace-Actions/g' $OUTPUT_FILE
+             cat $OUTPUT_FILE
+
       # For Windows Runners
+      
+      - if: ${{ runner.os == 'Windows' }} 
+        name: Install OSSF Command Line Tool on Windows Runners
+        run: |
+             curl -OL https://github.com/ossf/scorecard/releases/download/v4.10.2/scorecard_4.10.2_windows_amd64.tar.gz
+             tar -xvzf scorecard_4.10.2_windows_amd64.tar.gz
+        shell: cmd
+
       - if: ${{ runner.os == 'Windows' }} 
         name: Create a Policy File & Run Analysis on Windows Runners
         run: |
+             (echo ${{ vars.POLICY_WINDOWS }}) > "%POLICY_FILE%"
              scorecard-windows-amd64.exe --repo=%REPO% --checks=%CHECK_NAMES% --policy=%POLICY_FILE% --format=%OUTPUT_FORMAT% > %OUTPUT_FILE%
-             type %OUTPUT_FILE%
         shell: cmd
              
       - if: ${{ runner.os == 'Windows' }} 
@@ -74,19 +85,7 @@ jobs:
              (get-content ${env:OUTPUT_FILE} | %{$_ -replace "Scorecard","Scorecard-for-Marketplace-Actions"}) | set-content ${env:OUTPUT_FILE}
              cat ${env:OUTPUT_FILE}
         shell: pwsh
-
-      - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
-        name: Create a Policy File & Run Analysis on Linux/MacOS Runners
-        run: |
-             echo "${{ vars.POLICY }}" >> $POLICY_FILE
-             ./scorecard-linux-amd64 --repo=$REPO --checks=$CHECK_NAMES --policy=$POLICY_FILE --format=$OUTPUT_FORMAT > $OUTPUT_FILE
              
-      - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }}
-        name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
-        run: |
-             sed -i 's/Scorecard/Scorecard-for-Marketplace-Actions/g' $OUTPUT_FILE
-             cat $OUTPUT_FILE
-
       # Store SARIF file as an artifact
       - name: "Upload artifact"
         uses: actions/upload-artifact@3cea5372237819ed00197afe530f5a7ea3e805c8 # v3.1.0
