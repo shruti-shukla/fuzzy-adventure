@@ -71,10 +71,9 @@ jobs:
       - if: ${{ runner.os == 'Windows' }} 
         name: Change tool name to Scorecard-for-Marketplace-Actions in SARIF file
         run: |
-             $OUTPUT_FILE -replace "Scorecard","Scorecard-for-Marketplace-Actions"
+             (get-content $OUTPUT_FILE | %{$_, -replace "Scorecard","Scorecard-for-Marketplace-Actions"}) | set-content $OUTPUT_FILE
              cat $OUTPUT_FILE
         shell: pwsh
-        #get-content $OUTPUT_FILE | 
 
       - if: ${{ (runner.os == 'Linux') || (runner.os == 'macOS') }} 
         name: Create a Policy File & Run Analysis on Linux/MacOS Runners
